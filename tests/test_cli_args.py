@@ -4,6 +4,7 @@ import argparse
 
 from xsspectre import cli
 from xsspectre.reporting import VulnerabilityFinding
+from xsspectre.scanners.common import InjectionPoint
 
 
 def test_parse_args_scan_url_defaults(monkeypatch):
@@ -50,7 +51,13 @@ def test_parse_args_scan_list_with_toggles(monkeypatch, tmp_path):
 def test_scan_target_routes_enabled_checks(monkeypatch):
     args = argparse.Namespace(xss=True, sqli=False, depth=1, timeout=1.0)
 
-    monkeypatch.setattr(cli, "crawl_and_discover", lambda *_args, **_kwargs: ["point"])
+    monkeypatch.setattr(
+        cli,
+        "crawl_and_discover",
+        lambda *_args, **_kwargs: [
+            InjectionPoint(method="GET", url="https://example.test/search", parameter="q", source="query")
+        ],
+    )
     monkeypatch.setattr(
         cli,
         "scan_for_xss",
@@ -63,12 +70,19 @@ def test_scan_target_routes_enabled_checks(monkeypatch):
     result = cli._scan_target("https://example.test", args)
 
     assert [f.vulnerability_type for f in result.findings] == ["xss-reflected"]
+    assert result.notes[-1] == "Entry point: [query] GET https://example.test/search :: q"
 
 
 def test_scan_target_runs_both_checks_when_none_selected(monkeypatch):
     args = argparse.Namespace(xss=False, sqli=False, depth=1, timeout=1.0)
 
-    monkeypatch.setattr(cli, "crawl_and_discover", lambda *_args, **_kwargs: ["point"])
+    monkeypatch.setattr(
+        cli,
+        "crawl_and_discover",
+        lambda *_args, **_kwargs: [
+            InjectionPoint(method="GET", url="https://example.test/search", parameter="q", source="query")
+        ],
+    )
     monkeypatch.setattr(
         cli,
         "scan_for_xss",
@@ -87,3 +101,4 @@ def test_scan_target_runs_both_checks_when_none_selected(monkeypatch):
     result = cli._scan_target("https://example.test", args)
 
     assert {f.vulnerability_type for f in result.findings} == {"xss-reflected", "sqli-error-hint"}
+    assert result.notes[-1] == "Entry point: [query] GET https://example.test/search :: q"
