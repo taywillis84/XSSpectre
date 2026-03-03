@@ -7,7 +7,6 @@ from datetime import datetime, timezone
 from json import dumps
 from typing import Any, Literal
 
-
 Confidence = Literal["low", "medium", "high"]
 OutputFormat = Literal["json", "text"]
 
