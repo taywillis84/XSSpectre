@@ -70,7 +70,7 @@ def test_scan_target_routes_enabled_checks(monkeypatch):
     result = cli._scan_target("https://example.test", args)
 
     assert [f.vulnerability_type for f in result.findings] == ["xss-reflected"]
-    assert result.notes[-1] == "Entry point: [query] GET https://example.test/search :: q"
+    assert result.injection_points == ["[query] GET https://example.test/search :: q"]
 
 
 def test_scan_target_runs_both_checks_when_none_selected(monkeypatch):
@@ -101,4 +101,4 @@ def test_scan_target_runs_both_checks_when_none_selected(monkeypatch):
     result = cli._scan_target("https://example.test", args)
 
     assert {f.vulnerability_type for f in result.findings} == {"xss-reflected", "sqli-error-hint"}
-    assert result.notes[-1] == "Entry point: [query] GET https://example.test/search :: q"
+    assert result.injection_points == ["[query] GET https://example.test/search :: q"]
