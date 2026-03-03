@@ -25,7 +25,7 @@ class VulnerabilityFinding:
 class ScanResult:
     target: str
     findings: list[VulnerabilityFinding] = field(default_factory=list)
-    injection_points: list[dict[str, str]] = field(default_factory=list)
+    injection_points: list[str] = field(default_factory=list)
     scanned_at: str = field(
         default_factory=lambda: datetime.now(timezone.utc).isoformat(timespec="seconds")
     )
@@ -45,12 +45,7 @@ class ScanResult:
 
         if self.injection_points:
             lines.append("Injection points:")
-            lines.extend(
-                [
-                    "  - [{source}] {method} {url} :: {parameter}".format(**point)
-                    for point in self.injection_points
-                ]
-            )
+            lines.extend([f"  - {point}" for point in self.injection_points])
 
         if not self.findings:
             lines.append("Findings: none")
