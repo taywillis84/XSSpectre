@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xsspectre"
+version = "0.1.0"
+description = "Authorized baseline XSS/SQLi scanner"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "XSSpectre Maintainers" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Information Technology",
+]
+
+[project.scripts]
+xsspectre = "xsspectre.cli:main"
+
+[tool.setuptools]
+packages = ["xsspectre", "xsspectre.scanners"]
