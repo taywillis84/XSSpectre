@@ -43,6 +43,8 @@ def test_sqli_error_boolean_and_time_heuristics(monkeypatch):
     assert "sqli-error-hint" in types
     assert "sqli-boolean-hint" in types
     assert "sqli-time-hint" in types
+    error_finding = next(f for f in findings if f.vulnerability_type == "sqli-error-hint")
+    assert error_finding.entry_point == "[query] GET https://example.test/items :: id"
 
 
 def test_sqli_attempt_deduplication_prevents_duplicate_findings(monkeypatch):

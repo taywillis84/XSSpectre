@@ -62,7 +62,7 @@ def test_scan_target_routes_enabled_checks(monkeypatch):
         cli,
         "scan_for_xss",
         lambda points, timeout: [
-            VulnerabilityFinding("xss-reflected", "https://example.test", "q", "p", "high", "snippet")
+            VulnerabilityFinding("xss-reflected", "https://example.test", "q", "[query] GET https://example.test/search :: q", "p", "high", "snippet")
         ],
     )
     monkeypatch.setattr(cli, "scan_for_sqli", lambda points, timeout: [])
@@ -87,14 +87,14 @@ def test_scan_target_runs_both_checks_when_none_selected(monkeypatch):
         cli,
         "scan_for_xss",
         lambda points, timeout: [
-            VulnerabilityFinding("xss-reflected", "https://example.test", "q", "p", "high", "snippet")
+            VulnerabilityFinding("xss-reflected", "https://example.test", "q", "[query] GET https://example.test/search :: q", "p", "high", "snippet")
         ],
     )
     monkeypatch.setattr(
         cli,
         "scan_for_sqli",
         lambda points, timeout: [
-            VulnerabilityFinding("sqli-error-hint", "https://example.test", "id", "'", "medium", "snippet")
+            VulnerabilityFinding("sqli-error-hint", "https://example.test", "id", "[query] GET https://example.test/search :: q", "'", "medium", "snippet")
         ],
     )
 

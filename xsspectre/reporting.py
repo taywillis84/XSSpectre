@@ -16,6 +16,7 @@ class VulnerabilityFinding:
     vulnerability_type: str
     url: str
     parameter: str
+    entry_point: str
     payload: str
     confidence: Confidence
     evidence_snippet: str
@@ -57,6 +58,7 @@ class ScanResult:
                 [
                     f"  {idx}. [{finding.vulnerability_type}] {finding.url}",
                     f"     parameter: {finding.parameter}",
+                    f"     entry point: {finding.entry_point}",
                     f"     confidence: {finding.confidence}",
                     f"     payload: {finding.payload}",
                     f"     evidence: {finding.evidence_snippet}",

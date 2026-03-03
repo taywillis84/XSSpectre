@@ -34,6 +34,7 @@ def test_xss_reflection_classification_and_evidence(monkeypatch):
     assert "xss-reflected" in by_type
     assert "xss-reflection-encoded" in by_type
     assert "Echo:" in by_type["xss-reflected"].evidence_snippet
+    assert by_type["xss-reflected"].entry_point == "[query] GET https://example.test/search :: q"
 
 
 def test_xss_attempt_deduplication_prevents_duplicate_findings(monkeypatch):

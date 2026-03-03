@@ -73,6 +73,7 @@ def scan_for_sqli(points: list[InjectionPoint], timeout: float) -> list[Vulnerab
                             vulnerability_type="sqli-error-hint",
                             url=target,
                             parameter=point.parameter,
+                            entry_point=f"[{point.source}] {point.method} {point.url} :: {point.parameter}",
                             payload=payload,
                             confidence="medium",
                             evidence_snippet=response.body[snippet_start:snippet_end].replace("\n", " "),
@@ -99,6 +100,7 @@ def scan_for_sqli(points: list[InjectionPoint], timeout: float) -> list[Vulnerab
                         vulnerability_type="sqli-boolean-hint",
                         url=target_true,
                         parameter=point.parameter,
+                        entry_point=f"[{point.source}] {point.method} {point.url} :: {point.parameter}",
                         payload=f"{true_payload} | {false_payload}",
                         confidence="low",
                         evidence_snippet=f"body length delta={len_diff}",
@@ -123,6 +125,7 @@ def scan_for_sqli(points: list[InjectionPoint], timeout: float) -> list[Vulnerab
                         vulnerability_type="sqli-time-hint",
                         url=target,
                         parameter=point.parameter,
+                        entry_point=f"[{point.source}] {point.method} {point.url} :: {point.parameter}",
                         payload=payload,
                         confidence="low",
                         evidence_snippet=(
