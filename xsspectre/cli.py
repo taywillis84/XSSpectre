@@ -59,6 +59,15 @@ def _scan_target(target_url: str, args: argparse.Namespace) -> ScanResult:
 
     points = crawl_and_discover(target_url, depth=args.depth, timeout=args.timeout)
     result.notes.append(f"Discovered injection points: {len(points)}")
+    result.injection_points = [
+        {
+            "source": point.source,
+            "method": point.method,
+            "url": point.url,
+            "parameter": point.parameter,
+        }
+        for point in points
+    ]
 
     if run_xss:
         result.findings.extend(scan_for_xss(points, timeout=args.timeout))
